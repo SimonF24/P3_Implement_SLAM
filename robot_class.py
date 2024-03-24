@@ -36,7 +36,7 @@ class robot:
         self.num_landmarks = 0
     
     
-    # returns a positive, random float
+    # returns a random float in the range [-1, 1)
     def rand(self):
         return random.random() * 2.0 - 1.0
     
@@ -89,6 +89,12 @@ class robot:
         ## 3. If either of the distances, dx or dy, fall outside of the internal var, measurement_range
         ##    then we cannot record them; if they do fall in the range, then add them to the measurements list
         ##    as list.append([index, dx, dy]), this format is important for data creation done later
+        
+        for i in range(self.num_landmarks):
+            dx = (self.landmarks[i][0] - self.x) + self.rand()*self.measurement_noise
+            dy = (self.landmarks[i][1] - self.y) + self.rand()*self.measurement_noise
+            if abs(dx) <= self.measurement_range and abs(dy) <= self.measurement_range: # Note that this checks the distances separately, not the euclidean distance
+                measurements.append([i, dx, dy])
         
         ## TODO: return the final, complete list of measurements
         return measurements
